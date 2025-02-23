@@ -20,6 +20,12 @@ class RecipeController extends Controller
         return RecipeResource::collection(Recipe::paginate());
     }
 
+    // GET: api/v1/recipes
+    public function index()
+    {
+        return RecipeResource::collection(Recipe::paginate());
+    }
+    
     // GET: api/v1/recipes/{id}
     public function show($id)
     {

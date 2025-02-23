@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\ShoppingListController;
 use App\Http\Controllers\Api\V1\ShoppingListItemController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\UserIngredientController;
+use App\Models\RecipeIngredient;
 use App\Models\ShoppingList;
 use Illuminate\Support\Facades\Route;
 
@@ -24,31 +25,36 @@ Route::group(
             UserController::class
         );
 
+        Route::post(
+            'users/login',
+            [UserController::class, 'login']
+        );
+
         Route::apiResource(
             'ingredients',
             IngredientController::class
         );
 
-        Route::apiResource(
-            'recipe',
-            RecipeController::class
-        );
+            Route::get('/recipes', [RatingController::class, 'index']);         //Get all recipes
+            Route::post('/recipes/{id}', [RatingController::class, 'show']);    //Get a single recipe by ID
+            Route::get('/recipes', [RatingController::class, 'store']);         //Create a new recipe
+            Route::put('/recipes/{id}', [RatingController::class, 'update']);   //Update a recipe
+            Route::delete('/recipes/{id}', [RatingController::class, 'destroy']); //Delete a recipe
 
-        Route::apiResource(
-            'recipe-ingredients',
-            RecipeIngredientController::class
-        )
-            ->except(['update']);
+            Route::apiResource(
+                'recipe-ingredients',
+                RecipeIngredientController::class
+            )
+                ->exept(['update']);
 
         // Adding Route for Ratings
-        Route::prefix('recipes/{recipe_id}/ratings')->group(function () {
+        Route::prefix('recipes/{recipe_id}/rating')->group(function () {
             Route::get('/', [RatingController::class, 'index']);
             Route::post('/', [RatingController::class, 'store']);
             Route::get('{id}', [RatingController::class, 'show']);
             Route::put('{id}', [RatingController::class, 'update']);
-            Route::delete('{id}', [RatingController::class, 'destroy']);
+            Route::delete('{id}', [RatingController::class, 'delete']);
         });
-
         // Shopping Lists Routes
         Route::prefix('shopping-lists/{user_id}')->group(function () {
             Route::get('/', [ShoppingListController::class, 'index']);  // Show all shopping lists for a user

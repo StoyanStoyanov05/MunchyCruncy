@@ -35,6 +35,37 @@ class UserController extends Controller
         }
     }
 
+    // POST: api/v1/users/login 
+    public function login(Request $request)
+    {
+        // Validate input data
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Check if the user exists
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'Invalid credentials'], 401);  // Unauthorized
+        }
+
+        // Generate the JWT token
+        $token = $user->createToken('YourAppName')->plainTextToken;
+
+        // Return the token along with user info
+        return response()->json([
+            'message' => 'Login successful',
+            'token' => $token,
+            'user' => new UserResource($user)
+        ], 200);
+    }
+
     // POST: api/v1/users
     public function store(Request $request)
     {

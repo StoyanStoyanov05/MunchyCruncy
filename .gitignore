@@ -1,37 +1,26 @@
-# Dependencies
-/vendor/
-node_modules/
+#global 
 npm-debug.log
 yarn-error.log
+*.log
 
-# Laravel 4 specific
-bootstrap/compiled.php
-app/storage/
+.DS_Store
+Thumbs.db
 
-# Laravel 5 & Lumen specific
-public/storage
-public/hot
+# IDE & Editor 
+.vscode/
+.idea/
+.fleet/
+.nova/
+.zed/
 
-# Laravel 5 & Lumen specific with changed public path
-public_html/storage
-public_html/hot
+# Cache 
+.vite/
+.cache/
+output/
 
-# Sensitive files
-storage/*.key
+# Env 
 .env
-.env.backup
+.env.local
+.env.development
 .env.production
-Homestead.yaml
-Homestead.json
-/.vagrant
-.phpunit.result.cache
-
-# Editor & IDE settings
-/.fleet
-/.idea
-/.nova
-/.vscode
-/.zed
-
-backend/postcss.config.js
-backend/package-lock.json
+.env.backup
