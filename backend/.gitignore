@@ -39,3 +39,6 @@ Homestead.yaml
 .nova/
 .vscode/
 .zed/
+
+backend/package-lock.json
+backend/postcss.config.js

@@ -10,5 +10,8 @@ class Ingredient extends Model
     /** @use HasFactory<\Database\Factories\IngredientFactory> */
     use HasFactory;
 
-    protected $fillable = ['name', 'is_liquid'];
+    protected $fillable = [
+        'name',
+         'is_liquid'
+    ];
 }

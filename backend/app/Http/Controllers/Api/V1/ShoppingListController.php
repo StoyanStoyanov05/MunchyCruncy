@@ -22,11 +22,9 @@ class ShoppingListController extends Controller
     public function show($user_id, $id)
     {
         // Find the shopping list by ID and user_id
-        $shoppingList = ShoppingList::where('user_id', $user_id)->with('items.ingredient')->find($id); // Eager load the items and ingredients
-
-        if (!$shoppingList) {
-            return response()->json(['message' => 'Shopping List not found for this user'], 404);
-        }
+        $shoppingList = ShoppingList::where('user_id', $user_id)
+        ->with('items.ingredient') // Eager load the items and ingredients
+        ->find($id); 
 
         return new ShoppingListResource($shoppingList);
     }

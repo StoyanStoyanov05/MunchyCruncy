@@ -8,7 +8,6 @@ use App\Http\Controllers\Api\V1\ShoppingListController;
 use App\Http\Controllers\Api\V1\ShoppingListItemController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\UserIngredientController;
-use App\Models\RecipeIngredient;
 use App\Models\ShoppingList;
 use Illuminate\Support\Facades\Route;
 

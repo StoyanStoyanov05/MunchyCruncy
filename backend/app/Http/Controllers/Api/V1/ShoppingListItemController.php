@@ -14,7 +14,12 @@ class ShoppingListItemController extends Controller
     public function index($user_id, $list_id)
     {
         // Retrieve all items for a specific shopping list
-        $items = ShoppingListItem::where('shopping_list_id', $list_id)->get();
+        $items = ShoppingListItem::where(
+            'shopping_list_id',
+            $list_id
+        )
+            ->with('ingredient') //Ensure the ingredient relationship is loaded
+            ->get();
 
         // Return the items as a collection of resources
         return ShoppingListItemResource::collection($items);

@@ -24,10 +24,20 @@ class ShoppingList extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function ingredient()
+    {
+        return $this->belongTo(Ingredient::class);
+    }
+
     /**
      * Define relationship with ShoppingListItems (if exists)
      */
     public function shoppingListItems()
+    {
+        return $this->hasMany(ShoppingListItem::class);
+    }
+
+    public function items()
     {
         return $this->hasMany(ShoppingListItem::class);
     }

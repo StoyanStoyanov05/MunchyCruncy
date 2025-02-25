@@ -11,12 +11,21 @@ use Illuminate\Support\Facades\Validator;
 class IngredientController extends Controller
 {
     // GET: api/v1/ingredients
-    
-    public function index()
+    public function index(Request $request)
     {
-        // Fetch all ingredients and return them as a collection wrapped in the IngredientResource
-        $ingredients = Ingredient::paginate();
-        return IngredientResource::collection($ingredients); // Use IngredientResource::collection to format the list
+        // Check if a search term is provided, otherwise fetch all ingredients
+        $searchTerm = $request->query('search', ''); // Get 'search' query parameter if provided, default to an empty string
+
+        if ($searchTerm) {
+            // If a search term is provided, filter the ingredients
+            $ingredients = Ingredient::where('name', 'like', '%' . $searchTerm . '%')->paginate();
+        } else {
+            // Otherwise, fetch all ingredients
+            $ingredients = Ingredient::paginate();
+        }
+        
+        // Return the results as a collection wrapped in the IngredientResource
+        return IngredientResource::collection($ingredients); 
     }
 
     // GET: api/v1/ingredients/{id}
