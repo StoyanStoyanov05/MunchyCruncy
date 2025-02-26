@@ -24,7 +24,6 @@ public/hot/
 database/database.sqlite
 database/seeds/*.sqlite
 
-composer.lock
 auth.json
 .phpunit.cache
 .phpunit.result.cache
@@ -39,6 +38,3 @@ Homestead.yaml
 .nova/
 .vscode/
 .zed/
-
-backend/package-lock.json
-backend/postcss.config.js

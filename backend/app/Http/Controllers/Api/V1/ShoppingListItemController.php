@@ -26,7 +26,7 @@ class ShoppingListItemController extends Controller
     }
 
     // POST: api/v1/shopping-lists/{user_id}/{list_id}/items
-    public function store(Request $request, $user_id, $list_id)
+    public function store(Request $request, $list_id)
     {
         $validator = Validator::make($request->all(), [
             'ingredient_id' => 'required|exists:ingredients,id',

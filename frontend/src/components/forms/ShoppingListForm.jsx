@@ -38,7 +38,8 @@ const ShoppingListForm = ({ isEdit = false }) => {
                     setFormData({
                         name: response.data.data.name,
                         items: response.data.data.items.map(item => ({
-                            id: item.id,
+                            itemId: item.id,
+                            id: item.ingredient.id,
                             name: item.ingredient.name,
                             purchased: item.purchased
                         }))
@@ -87,24 +88,28 @@ const ShoppingListForm = ({ isEdit = false }) => {
     const addItem = () => {
         setFormData(prevState => ({
             ...prevState,
-            items: [...prevState.items, { id: null, name: '', purchased: false }]
+            items: [...prevState.items, { 
+                itemId: null,
+                id: null, 
+
+                name: '',
+                purchased: false
+             }]
         }));
     };
 
     const removeItem = async (index) => {
+
         const updatedItems = [...formData.items];
         const itemToRemove = updatedItems[index];
+        itemToRemove.id = itemToRemove.itemId;
 
         if (itemToRemove.id) {
             setLoading(true);
             try {
                 await axios.delete(
                     `http://127.0.0.1:8000/api/v1/shopping-lists/${user.id}/${id}/items/${itemToRemove.id}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${Cookies.get('auth_token')}`
-                        }
-                    }
+                    
                 );
             } catch (err) {
                 setError('Failed to remove item.');
@@ -126,26 +131,19 @@ const ShoppingListForm = ({ isEdit = false }) => {
         setError('');
         setLoading(true);
 
+        //console.log(formDate);
+        //debugger
+
         try {
             if (isEdit && id) {
                 await axios.put(
                     `http://127.0.0.1:8000/api/v1/shopping-lists/${user.id}/${id}`,
-                    formData,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${Cookies.get('auth_token')}`
-                        }
-                    }
+                    formData
                 );
             } else {
                 await axios.post(
                     `http://127.0.0.1:8000/api/v1/shopping-lists/${user.id}`,
-                    formData,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${Cookies.get('auth_token')}`
-                        }
-                    }
+                    formData
                 );
             }
             navigate(`/shopping-lists/${user.id}`);
@@ -169,6 +167,32 @@ const ShoppingListForm = ({ isEdit = false }) => {
             setIngredientSuggestions(response.data.data);
         } catch (err) {
             console.error('Error fetching ingredients:', err);
+        }
+    };
+
+    const handleAddItem = async (ingredient, index) => {
+        try {
+            const response = await axios.post(
+                `http://127.0.0.1:8000` +
+                `/api/v1/shopping-lists/${user.id}/${id}/items`, {
+                ingredient_id: ingredient.id,
+                purchased: false, // Default value
+            });
+
+            const updatedItems = [...formData.items];
+            updatedItems[index].itemId = response.data.id;
+            updatedItems[index].id = ingredient.id;
+            updatedItems[index].name = ingredient.name;
+            updatedItems[index].purchased = false;
+
+            setFormData({
+                ...formData,
+                items: updatedItems
+            });
+            setIngredientSuggestions([]);
+            setActiveInputIndex(null);
+        } catch (error) {
+            console.error('Failed to add item:', error.response?.data || error.message);
         }
     };
 
@@ -229,14 +253,11 @@ const ShoppingListForm = ({ isEdit = false }) => {
                                                         key={suggestion.id}
                                                         className="p-2 hover:bg-gray-100 cursor-pointer"
                                                         onClick={() => {
-                                                            const updatedItems = [...formData.items];
-                                                            updatedItems[index].name = suggestion.name;
-                                                            setFormData({ ...formData, items: updatedItems });
-                                                            setIngredientSuggestions([]);
-                                                            setActiveInputIndex(null);
+                                                            //Call Api to add the item
+                                                            handleAddItem(ingrSuggestion, index);
                                                         }}
                                                     >
-                                                        {suggestion.name}
+                                                        {ingrSuggestion.name}
                                                     </li>
                                                 ))}
                                             </ul>

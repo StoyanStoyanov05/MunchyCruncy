@@ -16,6 +16,8 @@ class RecipeResource extends JsonResource
             'description' => $this->description,
             'instructions' => $this->instructions,
             'imageUrl' => $this->image_url,
+
+            'ingredients' => IngredientResource::collection($this->ingredients) // Fetch all related ingredients
         ];
     }
 }

@@ -22,4 +22,11 @@ class Recipe extends Model
     {
         return $this->belongsTo(User::class);
     }
+    // Many-to-Many relationship with Ingredients
+    public function ingredients()
+    {
+        return $this->belongsToMany(
+            Ingredient::class,
+            'recipe_ingredients');
+    }
 }
