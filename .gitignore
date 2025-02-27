@@ -38,7 +38,6 @@ bootstrap/cache/
 .env.backup
 .env.production
 
-storage/
 storage/*.key
 storage/logs/
 storage/framework/
@@ -67,9 +66,6 @@ Homestead.yaml
 .vscode/
 .zed/
 
-backend/package-lock.json
-backend/postcss.config.js
-
 npm-debug.log
 yarn-error.log
 *.log
@@ -83,13 +79,12 @@ bootstrap/cache/
 .env.backup
 .env.production
 
-storage/
 storage/*.key
 storage/logs/
 storage/framework/
 storage/app/
 
-public/storage/
+
 public/build/
 public/hot/
 
@@ -133,7 +128,6 @@ output/
 *.local
 
 # Env files
-.env
 .env.local
 .env.development
 .env.production

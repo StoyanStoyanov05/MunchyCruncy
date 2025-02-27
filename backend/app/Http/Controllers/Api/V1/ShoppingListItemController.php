@@ -37,7 +37,7 @@ class ShoppingListItemController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        // Create a new shopping list item for the specified shopping list
+        // Create a new shopping list item for the specified shopping list with ingredients details
         $item = ShoppingListItem::create([
             'shopping_list_id' => $list_id,
             'ingredient_id' => $request->ingredient_id,

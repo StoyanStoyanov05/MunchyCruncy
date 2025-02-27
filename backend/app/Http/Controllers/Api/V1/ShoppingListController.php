@@ -8,7 +8,7 @@ use App\Models\ShoppingList;
 use App\Models\ShoppingListItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facedes\DB;
+use Illuminate\Support\Facades\DB;
 
 class ShoppingListController extends Controller
 {

@@ -34,11 +34,28 @@ Route::group(
         );
 
             Route::get('/recipes', [RecipeController::class, 'index']);         //Get all recipes
-            Route::get('/recipes/{id}', [RecipeController::class, 'show']);    //Get a single recipe by ID
+            Route::get(
+                '/recipes/{id}',
+                 [RecipeController::class, 'show']
+                )->where('id', '[0-9]+');   
+                
+            Route::post(
+                'recipes/{recipe_id}/ratings/update-or-create',
+                [
+                    RecipeController::class,
+                    'updateOrCreateRating'
+                ]
+            );
+                
             Route::get('/recipes/user/{user_id}', [
                 RecipeController::class,
                  'recipesByUser'
             ]);
+
+            Route::get(
+                'recipes/search',
+                [RecipeController::class, 'searchByIngredientNames']
+            );
             
             Route::delete(
                 '/recipes/{recipe_id}/ingredients/{ingredient_id}',
@@ -62,7 +79,8 @@ Route::group(
             Route::put('{id}', [RatingController::class, 'update']);
             Route::delete('{id}', [RatingController::class, 'destroy']);
         });
-        // Shopping Lists Routes
+
+            // Shopping Lists Routes
         Route::get('shopping-lists/{user_id}', [ShoppingListController::class, 'index']); // Get all shopping lists for a user
         Route::get('shopping-lists/{user_id}/{id}', [ShoppingListController::class, 'show']); // Get a specific shopping list with items
         Route::post('shopping-lists/{user_id}', [ShoppingListController::class, 'store']); // Create a new shopping list

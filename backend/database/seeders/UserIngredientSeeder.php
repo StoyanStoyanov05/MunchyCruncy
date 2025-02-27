@@ -6,7 +6,7 @@ use App\Models\UserIngredient;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class UserIngredientsSeeder extends Seeder
+class UserIngredientSeeder extends Seeder
 {
     /**
      * Run the database seeds.

@@ -11,14 +11,12 @@ bootstrap/cache/
 .env.backup
 .env.production
 
-storage/
+
 storage/*.key
 storage/logs/
 storage/framework/
 storage/app/
 
-public/storage/
-public/build/
 public/hot/
 
 database/database.sqlite

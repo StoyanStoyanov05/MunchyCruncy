@@ -248,9 +248,9 @@ const ShoppingListForm = ({ isEdit = false }) => {
 
                                         {activeInputIndex === index && ingredientSuggestions.length > 0 && (
                                             <ul className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-10 max-h-48 overflow-y-auto">
-                                                {ingredientSuggestions.map((suggestion) => (
+                                                {ingredientSuggestions.map((ingrSuggestion) => (
                                                     <li
-                                                        key={suggestion.id}
+                                                        key={ingrSuggestion.id}
                                                         className="p-2 hover:bg-gray-100 cursor-pointer"
                                                         onClick={() => {
                                                             //Call Api to add the item

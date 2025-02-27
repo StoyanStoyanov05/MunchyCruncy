@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
             ShoppingListSeeder::class,
             ShoppingListItemSeeder::class,
 
-            UserIngredientsSeeder::class
+            UserIngredientSeeder::class
         ]);
     }
 }

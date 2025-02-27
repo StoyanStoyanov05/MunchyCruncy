@@ -27,6 +27,12 @@ class Recipe extends Model
     {
         return $this->belongsToMany(
             Ingredient::class,
-            'recipe_ingredients');
+            'recipe_ingredients'
+        );
+    }
+    // Recipe.php
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
     }
 }

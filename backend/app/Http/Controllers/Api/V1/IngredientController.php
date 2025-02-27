@@ -13,23 +13,26 @@ class IngredientController extends Controller
     // GET: api/v1/ingredients
     public function index(Request $request)
     {
-        // Check if a search term is provided, otherwise fetch all ingredients
-        $searchTerm = $request->query('search', ''); // Get 'search' query parameter if provided, default to an empty string
+        
+        $searchTerm = $request->query('search', ''); 
+        $noPagination = $request->query('all', false); // Check if `all=true` is passed in the query
+        
+        $query = Ingredient::query();
 
         if ($searchTerm) {
-            // If a search term is provided, filter the ingredients
-            $ingredients = Ingredient::where('name', 'like', '%' . $searchTerm . '%')->paginate();
-        } else {
-            // Otherwise, fetch all ingredients
-            $ingredients = Ingredient::paginate();
+            $query->where('name', 'like', '%' . $searchTerm . '%');
+        } 
+        
+        if ($noPagination) {
+            // If 'all=true' is in the request, return all ingredients without pagination
+            return IngredientResource::collection($query->get());
         }
         
-        // Return the results as a collection wrapped in the IngredientResource
-        return IngredientResource::collection($ingredients); 
+        // Default to paginated results
+        return IngredientResource::collection($query->paginate()); 
     }
 
     // GET: api/v1/ingredients/{id}
-    
     public function show($id)
     {
         // Find an ingredient by ID
