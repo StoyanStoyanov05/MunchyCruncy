@@ -35,7 +35,7 @@ Route::group(
 
             Route::get('/recipes', [RecipeController::class, 'index']);         //Get all recipes
             Route::get(
-                '/recipes/{id}',
+                'recipes/{id}',
                  [RecipeController::class, 'show']
                 )->where('id', '[0-9]+');   
                 

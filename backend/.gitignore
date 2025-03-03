@@ -7,16 +7,6 @@ node_modules/
 vendor/
 bootstrap/cache/
 
-.env
-.env.backup
-.env.production
-
-
-storage/*.key
-storage/logs/
-storage/framework/
-storage/app/
-
 public/hot/
 
 database/database.sqlite

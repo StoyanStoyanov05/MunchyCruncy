@@ -18,13 +18,6 @@ dist-ssr/
 output/
 *.local
 
-# Env files
-.env
-.env.local
-.env.development
-.env.production
-.env.backup
-
 # Editor directories and files
 .vscode/
 !.vscode/extensions.json

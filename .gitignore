@@ -18,13 +18,6 @@ Thumbs.db
 .cache/
 output/
 
-# Env 
-.env
-.env.local
-.env.development
-.env.production
-.env.backup
-
 npm-debug.log
 yarn-error.log
 *.log
@@ -34,16 +27,11 @@ node_modules/
 vendor/
 bootstrap/cache/
 
-.env
-.env.backup
-.env.production
-
 storage/*.key
 storage/logs/
 storage/framework/
 storage/app/
 
-public/storage/
 public/build/
 public/hot/
 
@@ -75,15 +63,10 @@ node_modules/
 vendor/
 bootstrap/cache/
 
-.env
-.env.backup
-.env.production
-
 storage/*.key
 storage/logs/
 storage/framework/
 storage/app/
-
 
 public/build/
 public/hot/
@@ -126,12 +109,6 @@ dist-ssr/
 .cache/
 output/
 *.local
-
-# Env files
-.env.local
-.env.development
-.env.production
-.env.backup
 
 # Editor directories and files
 .vscode/

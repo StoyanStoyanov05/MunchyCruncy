@@ -38,16 +38,22 @@ function Navbar() {
                     <Link to="/" className="hover:text-gray-300">Home</Link>
                     <Link to="/about" className="hover:text-gray-300">About</Link>
 
-                    {token ? (
+                {token ? (
                         // If the user is logged in, show the user-specific menu
-                        <>
+                    <>
+
+                            <Link
+                                to="/my-recipes"
+                                className="hover:text-gray-300">
+                                My Recipes
+                            </Link>
                             <Link to="/shopping-list" className="hover:text-gray-300">
                                 Shopping List
                             </Link>
 
                             <Link to="/profile" className="hover:text-gray-300">Profile</Link>
                             {user?.role === 1 && (
-                                <Link to="/admin" className="hover:text-gray-300">Admin Dashboard</Link> // Example for admin users
+                            <Link to="/admin" className="hover:text-gray-300">Admin Dashboard</Link> // Example for admin users
                             )}
                             <button
                                 onClick={handleLogout}

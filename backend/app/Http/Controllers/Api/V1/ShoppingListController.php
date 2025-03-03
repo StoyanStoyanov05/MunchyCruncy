@@ -37,11 +37,15 @@ class ShoppingListController extends Controller
         // Validation rules
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:100',
+            'items' => 'requiered|array', //Ensure items array is present
+            'items.*.id' => 'required|exists:ingredients,id',
+            'items.*.purchased' => 'boolean', // Validate purchased field
         ]);
 
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
+        try{
 
         // Create a new shopping list with the provided user_id
         $shoppingList = ShoppingList::create([
@@ -49,8 +53,23 @@ class ShoppingListController extends Controller
             'user_id' => $user_id,
         ]);
 
+        foreach($request->item as $item) {
+            ShoppingListItem::create([
+                'shoping_list_id' => $shoppingList->id,
+                'ingredient_id' => $item['id'],
+                'purchased' => $item['purchased'] ?? false,
+            ]);
+        }
+
+        DB::commit(); //Commit the transaction
+        
         return new ShoppingListResource($shoppingList);
+    } catch(\Exception $e) {
+        DB::rollBack(); //Rollbacj the transaction in case of an error
+        return response()->json(['message' => 'Failed to create shopping list', 'error' => $e->getMessage()], 500);
     }
+
+}
 
     // PUT: api/v1/shopping-lists/{user_id}/{id}
     public function update(Request $request, $user_id, $id)
