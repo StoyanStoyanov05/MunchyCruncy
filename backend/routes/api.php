@@ -18,16 +18,36 @@ Route::group(
     ],
     function () { 
 
-        Route::apiResource(
-            'users',
-            UserController::class
-        );
+       
 
         Route::post(
             'users/login',
             [UserController::class, 'login']
         );
 
+        Route::apiResource(
+            'users',
+            UserController::class
+          )->only(
+            [
+                'index',
+                'store'
+            ]
+          ); //Public routes
+
+        Route::middleware([
+            'check.bearer.token',
+        ])->group(function () {
+            Route::apiResource(
+                'users',
+                UserController::class
+            )->except([
+                'index',
+                'store'
+            ]); // Protect everythigng else
+
+        });
+        
         Route::apiResource(
             'ingredients',
             IngredientController::class

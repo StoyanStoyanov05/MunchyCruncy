@@ -80,4 +80,10 @@ return [
         'validate_csrf_token' => Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
     ],
 
+    'unauthenticated' => [
+        'message' => 'Unauthenticated. Please login first.',
+        'status' => 'error',
+        'code' => 401
+    ],
+
 ];
