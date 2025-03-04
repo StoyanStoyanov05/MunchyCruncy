@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class User extends Authenticatable
 {
@@ -40,4 +41,14 @@ class User extends Authenticatable
     protected $casts = [
         'password' => 'hashed',
     ];
+    /**
+     * Get all of the user's personal access tokens.
+     */
+    // public function tokens()
+    // {
+    //     return $this->hasMany(
+    //         PersonalAccessToken::class,
+    //         'tokenable_id'
+    //     );
+    // }
 }

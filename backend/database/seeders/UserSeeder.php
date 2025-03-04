@@ -18,10 +18,14 @@ class UserSeeder extends Seeder
         User::create([
             'name' => 'Admin User',
             'email' => 'admin@example.com',
-            'password' => Hash::make('admin'),
+            'password' => Hash::make('password'),
             'role' => 1, // Admin role
         ]);
 
+        User::factory()->create([
+            'email' => 'willa29@example.com',
+        ]);
+        
         // Creating 10 random users
         User::factory(10)->create();
     }

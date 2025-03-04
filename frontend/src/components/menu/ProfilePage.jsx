@@ -3,12 +3,15 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import { useAuthCheck, useLogout } from "../../utils/authUtils";
 
 function ProfilePage() {
+    useAuthCheck();
     const navigate = useNavigate();
+    const logout = useLogout(); // Get logout function
     const user = JSON.parse(Cookies.get("user")) || null;  // Get user info from cookies
 
-    console.log(user);
+    const token = Cookies.get("auth_token");
 
     const [formData, setFormData] = useState({
         name: user?.name || "",
@@ -45,6 +48,13 @@ function ProfilePage() {
                     name: formData.name,
                     email: formData.email,
                     password: formData.password,  // You can decide whether to send the password if it's not empty
+                },
+                {
+            
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
                 }
             );
 
@@ -60,7 +70,14 @@ function ProfilePage() {
                 toast.success("Profile updated successfully.");
             }
         } catch (error) {
-            setError("An error occurred while updating your profile.");
+            // Check if the error response status is 401 (Unauthorized)
+            if (error.response && error.response.status === 401) {
+                toast.error("Session expired. Please log in again.");
+                logout();                
+            } else {
+                // Handle other errors normally
+            setError("An error occurred while updating your profile.");  
+            }
         }
     };
 

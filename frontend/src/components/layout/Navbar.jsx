@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie'; // Import js-cookie to access stored
 import logo from '../../assets/logoDiplomna.png';
+import { useLogout } from '../../utils/authUtils';
 
 function Navbar() {
     const navigate = useNavigate();
@@ -19,12 +20,7 @@ function Navbar() {
         user = null;  // If parsing fails, set user to null
     }
 
-    // Handle logout action
-    const handleLogout = () => {
-        Cookies.remove('auth_token');
-        Cookies.remove('user');
-        navigate('/login');  // Redirect to login page after logging out
-    };
+    const logout = useLogout();
 
     return (
         <nav className="fixed top-0 left-0 w-full text-white p-4 shadow-md z-50 navbarCustom">
@@ -56,7 +52,7 @@ function Navbar() {
                             <Link to="/admin" className="hover:text-gray-300">Admin Dashboard</Link> // Example for admin users
                             )}
                             <button
-                                onClick={handleLogout}
+                                onClick={logout}
                                 className="hover:text-black-300 text-sm"
                             >
                                 Logout
