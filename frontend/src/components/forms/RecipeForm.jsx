@@ -4,8 +4,14 @@ import Cookies from 'js-cookie';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaPlus, FaMinus, FaUpload } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
+import { useAuthCheck } from '../../utils/authUtils';
 
 const RecipeForm = ({ isEdit = false }) => {
+
+    if (isEdit) {
+        useAuthCheck();
+    }
+
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -17,6 +23,7 @@ const RecipeForm = ({ isEdit = false }) => {
     const [loading, setLoading] = useState(false);
     const [ingredientSuggestions, setIngredientSuggestions] = useState([]);
     const [activeInputIndex, setActiveInputIndex] = useState(null);
+    const [searchInput, setSearchInput] = useState('');
 
     const navigate = useNavigate();
     const { id } = useParams(); // Used for editing an existing recipe
@@ -24,6 +31,8 @@ const RecipeForm = ({ isEdit = false }) => {
     const user = useMemo(() => {
         return Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null;
     }, []);
+
+    const authToken = Cookies.get("auth_token");
 
     useEffect(() => {
         if (!user) {
@@ -34,7 +43,10 @@ const RecipeForm = ({ isEdit = false }) => {
         if (isEdit && id) {
             const fetchRecipe = async () => {
                 try {
-                    const response = await axios.get(`http://127.0.0.1:8000/api/v1/recipes/${id}`);
+                    const response = await axios.get(
+                        `http://127.0.0.1:8000/api/v1/recipes/${id}`
+                    );
+
                     setFormData({
                         title: response.data.data.title,
                         description: response.data.data.description,
@@ -92,7 +104,10 @@ const RecipeForm = ({ isEdit = false }) => {
 
         try {
             const response = await axios.delete(
-                `http://127.0.0.1:8000/api/v1/recipes/${recipeId}/ingredients/${ingredientId}`);
+                `http://127.0.0.1:8000/api/v1/recipes/${recipeId}/ingredients/${ingredientId}`
+                ,{
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
 
             // Remove the ingredient from the state after successful deletion
             setFormData((prevData) => ({
@@ -127,9 +142,14 @@ const RecipeForm = ({ isEdit = false }) => {
             }
 
             if (isEdit && id) {
-                await axios.put(`http://127.0.0.1:8000/api/v1/recipes/${id}`, recipeData);
+                await axios.put(`http://127.0.0.1:8000/api/v1/recipes/${id}`,
+                     recipeData
+                     ,{ headers: { 'Authorization': `Bearer ${authToken}` } });
             } else {
-                await axios.post('http://127.0.0.1:8000/api/v1/recipes', recipeData);
+                await axios.post('http://127.0.0.1:8000/api/v1/recipes',
+                     recipeData,
+                     { headers: { 'Authorization': `Bearer ${authToken}` } }
+                    );
             }
 
             navigate(`/my-recipes`);

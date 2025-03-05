@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'check.bearer.token' => \App\Http\Middleware\CheckBearerToken::class,
+            'unauthorized' => \App\Http\Middleware\UnauthorizedMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {})->create();

@@ -1,8 +1,10 @@
 import { useEffect, useState, useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { FaStar } from "react-icons/fa";
+import { toast } from "react-toastify";
+import { useLogout } from "../utils/authUtils";
 
 const RecipePage = () => {
     const { id } = useParams(); // Get recipe ID from URL
@@ -15,6 +17,8 @@ const RecipePage = () => {
     const user = useMemo(() => {
         return Cookies.get("user") ? JSON.parse(Cookies.get("user")) : null;
     }, []);
+
+    const authToken = Cookies.get("auth_token");
 
     useEffect(() => {
         const fetchRecipe = async () => {
@@ -54,6 +58,11 @@ const RecipePage = () => {
                 {
                     user_id: user.id,
                     rating: selectedRating,
+                },
+                {
+                headers: {
+                'Authorization': `Bearer ${authToken}`
+                }
                 }
             );
 

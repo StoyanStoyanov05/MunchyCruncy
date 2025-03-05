@@ -28,7 +28,10 @@ class CheckBearerToken
             $rawToken = $matches[1]; // Extract raw token
 
             // Find the token in the personal_access_tokens table using the raw token
-            $accessToken = PersonalAccessToken::where('token', $rawToken)->first();
+            $accessToken = PersonalAccessToken::where(
+                'token',
+                 $rawToken
+                 )->first();
 
             // If token is not found or expired
             if (!$accessToken || $accessToken->expires_at <= now()) {

@@ -2,8 +2,10 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie'; // For managing cookies
 import { useNavigate } from 'react-router-dom';
+import { useAuthCheck } from '../../../utils/authUtils';
 
 const ShoppingListPage = () => {
+    useAuthCheck();
     const [shoppingLists, setShoppingLists] = useState([]);
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -12,10 +14,16 @@ const ShoppingListPage = () => {
         return Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null;
     }, []);
 
+    const authToken = Cookies.get("auth_token");
     const fetchShoppingLists = useCallback(async () => {
         try {
             const response = await axios.get(
-                `http://127.0.0.1:8000/api/v1/shopping-lists/${user.id}`
+                `http://127.0.0.1:8000/api/v1/shopping-lists/${user.id}`,
+                {
+                    headers: {
+                    'Authorization': `Bearer ${authToken}`
+                    }
+                    }
             );
             setShoppingLists(response.data.data);
         } catch (err) {

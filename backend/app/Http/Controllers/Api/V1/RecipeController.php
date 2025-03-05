@@ -24,10 +24,15 @@ class RecipeController extends Controller
     // GET: api/v1/recipes/user/{user_id}
     public function recipesByUser($user_id)
     {
-        $recipes = Recipe::where('user_id', $user_id)->paginate();
+        $recipes = Recipe::where(
+            'user_id',
+            $user_id
+            )->paginate();
    
         if ($recipes->isEmpty()) {
-            return response()->json(['message' => 'No recipes found for this user'], 404);
+            return response()->json([
+                'message' => 'No recipes found for this user'
+            ], 404);
         }
    
         return RecipeResource::collection($recipes);
@@ -143,7 +148,7 @@ class RecipeController extends Controller
             'instructions' => 'sometimes|string',
             'image_url' => 'nullable|string',
             'ingredients' => 'array',
-            'ingredients.*' => 'integer|exists:ingredients,id'
+            'ingredients.*' => 'integer|exists:ingredients,id',
         ]);
 
         if ($validator->fails()) {

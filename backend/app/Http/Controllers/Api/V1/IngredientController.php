@@ -20,7 +20,11 @@ class IngredientController extends Controller
         $query = Ingredient::query();
 
         if ($searchTerm) {
-            $query->where('name', 'like', '%' . $searchTerm . '%');
+            $query->where(
+                'name',
+                'like', 
+                '%' . $searchTerm . '%'
+            );
         } 
         
         if ($noPagination) {

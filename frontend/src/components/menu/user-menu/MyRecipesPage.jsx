@@ -2,36 +2,52 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie'; // For managing cookies
 import { useNavigate } from 'react-router-dom';
+import { useAuthCheck } from '../../../utils/authUtils';
 
 const MyRecipesPage = () => {
+    useAuthCheck();
     const [recipes, setRecipes] = useState([]);
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    // Retrieve the current user from cookies
+    // Retrieve the current user and auth token from cookies
     const user = useMemo(() => {
         return Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null;
     }, []);
 
+    const authToken = Cookies.get("auth_token");
+
     const fetchRecipes = useCallback(async () => {
+
+        if (!user || !authToken) {
+            setError('Unauthorized access. Please log in.');
+            navigate('/login');
+            return;
+            }
+
         try {
             const response = await axios.get(
-                `http://127.0.0.1:8000/api/v1/recipes/user/${user.id}`
+                `http://127.0.0.1:8000/api/v1/recipes/user/${user.id}`,
+                {
+                    headers: {
+                    'Authorization': `Bearer ${authToken}`
+                    }
+                    }
             );
             setRecipes(response.data.data);
         } catch (err) {
-            setError('Failed to fetch recipes.');
+            setError('No recipes found for this user');
         }
-    }, [user]);
+    }, [user, authToken, navigate]);
 
     useEffect(() => {
-        if (!user) {
-            navigate('/login'); // Redirect to login if no user
+        if (!user || !authToken) {
+            navigate('/login'); // Redirect to login if no user or token
             return;
         }
 
         fetchRecipes();
-    }, [fetchRecipes, navigate]); // Re-fetch recipes whenever the user changes
+    }, [fetchRecipes, navigate, authToken]); // Re-fetch recipes whenever the user changes
 
     const handleEditRecipe = (recipeId) => {
         navigate(`/recipes/edit/${recipeId}`); // Navigate to the edit page for the selected recipe
@@ -43,9 +59,19 @@ const MyRecipesPage = () => {
 
     // Handle deleting a recipe
     const handleDeleteRecipe = async (recipeId) => {
+        if (!authToken) {
+                setError('Unauthorized access. Please log in.');
+                navigate('/login');
+            return;
+            }
         try {
             const response = await axios.delete(
-                `http://127.0.0.1:8000/api/v1/recipes/${recipeId}`
+                `http://127.0.0.1:8000/api/v1/recipes/${recipeId}`,
+                {
+                    headers: {
+                    'Authorization': `Bearer ${authToken}`
+                    }
+                    }
             );
 
             if (response.status === 200) {

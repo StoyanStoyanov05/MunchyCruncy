@@ -57,6 +57,8 @@ class UserController extends Controller
             return response()->json(['message' => 'Invalid credentials'], 401);  // Unauthorized
         }
 
+        $user->tokens()->delete();
+        
         // Step 1: Create the token using `createToken` method
         $newToken = $user->createToken('YourAppName');
 

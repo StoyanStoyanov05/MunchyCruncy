@@ -17,7 +17,7 @@ Route::group(
         'namespace' => 'App\Http\Controllers\Api\V1'
     ],
     function () { 
-
+        //users
        
 
         Route::post(
@@ -30,11 +30,56 @@ Route::group(
             UserController::class
           )->only(
             [
-                'index',
                 'store'
             ]
-          ); //Public routes
+          ); 
+          
 
+        // ingredients
+        Route::apiResource(
+            'ingredients',
+            IngredientController::class
+        )->only([
+            'index'
+        ]);
+
+        // recipes
+        Route::apiResource(
+            'recipes',
+            RecipeController::class
+        )->only([
+            'index'
+        ]);
+
+        Route::get(
+            'recipes/{id}',
+            [RecipeController::class, 'show']
+        )->where('id', '[0-9]+');
+
+        Route::get(
+            'recipes/search',
+            [RecipeController::class, 'searchByIngredientNames']
+        );
+
+        Route::middleware([
+            'unauthorized',
+        ])->group(function () {
+            Route::apiResource(
+                'users',
+                UserController::class
+            )->only([
+                'index'
+            ]);
+
+            Route::apiResource(
+                'ingredients',
+                IngredientController::class
+            )->except([
+                'index'
+            ]);
+        });
+
+        // Protected Routes (Require Authentication)
         Route::middleware([
             'check.bearer.token',
         ])->group(function () {
@@ -44,51 +89,30 @@ Route::group(
             )->except([
                 'index',
                 'store'
-            ]); // Protect everythigng else
-
-        });
-        
-        Route::apiResource(
-            'ingredients',
-            IngredientController::class
-        );
-
-            Route::get('/recipes', [RecipeController::class, 'index']);         //Get all recipes
-            Route::get(
-                'recipes/{id}',
-                 [RecipeController::class, 'show']
-                )->where('id', '[0-9]+');   
-                
-            Route::post(
-                'recipes/{recipe_id}/ratings/update-or-create',
-                [
-                    RecipeController::class,
-                    'updateOrCreateRating'
-                ]
-            );
+            ]);
                 
             Route::get('/recipes/user/{user_id}', [
                 RecipeController::class,
                  'recipesByUser'
             ]);
 
-            Route::get(
-                'recipes/search',
-                [RecipeController::class, 'searchByIngredientNames']
-            );
+            Route::post('/recipes', [RecipeController::class,'store']); // Create a new recipe
+            Route::put('/recipes/{id}', [RecipeController::class, 'update']); // Update a recipe
+            Route::delete('/recipes/{id}', [RecipeController::class, 'destroy']); // Delete a recipe
+            
             
             Route::delete(
                 '/recipes/{recipe_id}/ingredients/{ingredient_id}',
                 [RecipeController::class, 'removeIngredient']
             );
             
-            Route::post('/recipes', [RecipeController::class, 'store']);         //Create a new recipe
-            Route::put('/recipes/{id}', [RecipeController::class, 'update']);   //Update a recipe
-            Route::delete('/recipes/{id}', [RecipeController::class, 'destroy']); //Delete a recipe
-
-            Route::apiResource(
-                'recipe-ingredients',
-                RecipeIngredientController::class
+            Route::post(
+                'recipes/{recipe_id}/ratings/update-or-create',
+                [
+                RecipeController::class,
+                'updateOrCreateRating'
+                ]
+                
             );
 
             // Adding Route for Ratings
@@ -116,13 +140,7 @@ Route::group(
             Route::delete('{id}', [ShoppingListItemController::class, 'destroy']);  // Delete item from shopping list
         });
 
-        // User Ingredients Routes
-        Route::prefix('users/{user_id}/ingredients')->group(function () {
-            Route::get('/', [UserIngredientController::class, 'index']);  // Get all ingredients for a user
-            Route::post('/', [UserIngredientController::class, 'store']);  // Add ingredient to user's list
-            Route::get('{id}', [UserIngredientController::class, 'show']);  // Show specific user ingredient
-            Route::put('{id}', [UserIngredientController::class, 'update']);  // Update user ingredient
-            Route::delete('{id}', [UserIngredientController::class, 'destroy']);  // Delete user ingredient
+
         });
     }
 );

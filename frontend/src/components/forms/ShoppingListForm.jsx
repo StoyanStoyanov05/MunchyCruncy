@@ -3,8 +3,10 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaPlus, FaMinus } from 'react-icons/fa';
+import { useAuthCheck } from '../../utils/authUtils';
 
-const ShoppingListForm = ({ isEdit = false }) => {
+const ShoppingListForm = ({ isEdit = false }) => { 
+    useAuthCheck(); 
     const [formData, setFormData] = useState({
         name: '',
         items: []
@@ -22,6 +24,7 @@ const ShoppingListForm = ({ isEdit = false }) => {
         return Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null;
     }, []);
 
+    const authToken = Cookies.get("auth_token");
     useEffect(() => {
         if (!user) {
             navigate('/login');
@@ -33,6 +36,8 @@ const ShoppingListForm = ({ isEdit = false }) => {
                 try {
                     const response = await axios.get(
                         `http://127.0.0.1:8000/api/v1/shopping-lists/${user.id}/${id}`
+                        ,
+                        { headers: { 'Authorization': `Bearer ${authToken}` } }
                     );
 
                     setFormData({
@@ -109,7 +114,7 @@ const ShoppingListForm = ({ isEdit = false }) => {
             try {
                 await axios.delete(
                     `http://127.0.0.1:8000/api/v1/shopping-lists/${user.id}/${id}/items/${itemToRemove.id}`,
-                    
+                    { headers: { 'Authorization': `Bearer ${authToken}` } }
                 );
             } catch (err) {
                 setError('Failed to remove item.');
@@ -138,12 +143,14 @@ const ShoppingListForm = ({ isEdit = false }) => {
             if (isEdit && id) {
                 await axios.put(
                     `http://127.0.0.1:8000/api/v1/shopping-lists/${user.id}/${id}`,
-                    formData
+                    formData,
+                    { headers: { 'Authorization': `Bearer ${authToken}` } }
                 );
             } else {
                 await axios.post(
                     `http://127.0.0.1:8000/api/v1/shopping-lists/${user.id}`,
-                    formData
+                    formData,
+                    { headers: { 'Authorization': `Bearer ${authToken}` } }
                 );
             }
             navigate(`/shopping-lists/${user.id}`);
@@ -161,7 +168,8 @@ const ShoppingListForm = ({ isEdit = false }) => {
         }
 
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/v1/ingredients`, {
+            const response = await axios.get(`http://127.0.0.1:8000/api/v1/ingredients`, 
+            {
                 params: { search: query }
             });
             setIngredientSuggestions(response.data.data);
@@ -174,9 +182,15 @@ const ShoppingListForm = ({ isEdit = false }) => {
         try {
             const response = await axios.post(
                 `http://127.0.0.1:8000` +
-                `/api/v1/shopping-lists/${user.id}/${id}/items`, {
+                `/api/v1/shopping-lists/${user.id}/${id}/items`, 
+                {
                 ingredient_id: ingredient.id,
                 purchased: false, // Default value
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
             });
 
             const updatedItems = [...formData.items];
