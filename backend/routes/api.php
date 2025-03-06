@@ -3,12 +3,9 @@
 use App\Http\Controllers\Api\V1\IngredientController;
 use App\Http\Controllers\Api\V1\RatingController;
 use App\Http\Controllers\Api\V1\RecipeController;
-use App\Http\Controllers\Api\V1\RecipeIngredientController;
 use App\Http\Controllers\Api\V1\ShoppingListController;
 use App\Http\Controllers\Api\V1\ShoppingListItemController;
 use App\Http\Controllers\Api\V1\UserController;
-use App\Http\Controllers\Api\V1\UserIngredientController;
-use App\Models\ShoppingList;
 use Illuminate\Support\Facades\Route;
 
 Route::group(
@@ -61,7 +58,16 @@ Route::group(
             [RecipeController::class, 'searchByIngredientNames']
         );
 
-        Route::middleware([
+        // Adding Route for Ratings
+        Route::prefix('recipes/{recipe_id}/ratings')->group(function () {
+            Route::get(
+                '/',
+                [RatingController::class, 'index']
+            );
+        });
+
+        // Protected Routes (Require Authentication)
+         Route::middleware([
             'unauthorized',
         ])->group(function () {
             Route::apiResource(
@@ -117,7 +123,6 @@ Route::group(
 
             // Adding Route for Ratings
         Route::prefix('recipes/{recipe_id}/ratings')->group(function () {
-            Route::get('/', [RatingController::class, 'index']);
             Route::post('/', [RatingController::class, 'store']);
             Route::get('{id}', [RatingController::class, 'show']);
             Route::put('{id}', [RatingController::class, 'update']);

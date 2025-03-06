@@ -14,4 +14,15 @@ class Ingredient extends Model
         'name',
          'is_liquid'
     ];
+
+    /**
+     * Define relationship with Recipe
+     */
+    public function recipes()
+    {
+        return $this->belongsTo(
+            Recipe::class,
+            'recipe_ingredients'
+        );
+    }
 }
