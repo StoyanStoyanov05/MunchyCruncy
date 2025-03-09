@@ -22,6 +22,8 @@ return new class extends Migration
                 ->foreignId('ingredient_id')
                 ->constrained()
                 ->onDelete('cascade'); // Foreign key to ingredients
+                
+            $table->integer('quantity')->nullable(); // Example extra field
         });
     }
 

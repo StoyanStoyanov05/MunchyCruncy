@@ -24,6 +24,7 @@ class UserSeeder extends Seeder
 
         User::factory()->create([
             'email' => 'willa29@example.com',
+            'role' => 0
         ]);
         
         // Creating 10 random users

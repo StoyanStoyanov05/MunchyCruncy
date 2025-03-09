@@ -20,9 +20,9 @@ class Ingredient extends Model
      */
     public function recipes()
     {
-        return $this->belongsTo(
-            Recipe::class,
-            'recipe_ingredients'
-        );
+        return $this->belongsToMany(Recipe::class, 'recipe_ingredients')
+            ->using(RecipeIngredient::class)
+            ->withPivot('quantity');
+
     }
 }

@@ -25,10 +25,9 @@ class Recipe extends Model
     // Many-to-Many relationship with Ingredients
     public function ingredients()
     {
-        return $this->belongsToMany(
-            Ingredient::class,
-            'recipe_ingredients'
-        );
+        return $this->belongsToMany(Ingredient::class, 'recipe_ingredients')
+            ->using(RecipeIngredient::class)
+            ->withPivot('quantity'); // Include extra pivot fields if needed
     }
     // Recipe.php
     public function ratings()
