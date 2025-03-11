@@ -17,12 +17,19 @@ class RecipeFactory extends Factory
      */
     public function definition(): array
     {
+        // Define an array of image URLs
+        $images = [
+            'image1.jpg',
+            'image2.jpg',
+            'image3.jpg',
+        ];
+
         return [
-            'user_id' => User::inRandomOrder()->first()->id, // Create a user automatically if not provided
+            'user_id' => User::inRandomOrder()->first()->id, // Assign a random user
             'title' => $this->faker->sentence(4),
             'description' => $this->faker->paragraph(3),
             'instructions' => $this->faker->paragraphs(3, true),
-            'image_url' => 'https://placehold.co/200x200', // Use the static placeholder URL
+            'image_url' => $this->faker->randomElement($images), // Randomly select an image
         ];
     }
 }

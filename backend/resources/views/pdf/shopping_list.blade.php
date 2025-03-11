@@ -29,7 +29,7 @@
                 <tr>
                     <td>{{ $item->ingredient->name }}</td>
                     <td>{{ $item->quantity_unit_text }}</td>
-                    <td>{{ $item->is_purchased ? 'Да' : 'Не' }}</td>
+                    <td>{{ $item->is_purchased ? 'Yes' : 'No' }}</td>
                 </tr>
             @endforeach
         </tbody>

@@ -102,7 +102,7 @@ Route::group(
                  'recipesByUser'
             ]);
 
-            Route::post('/recipes', [RecipeController::class,'store']); // Create a new recipe
+            Route::post('/recipes', [RecipeController::class, 'store']);  // Create a new recipe
             Route::put('/recipes/{id}', [RecipeController::class, 'update']); // Update a recipe
             Route::delete('/recipes/{id}', [RecipeController::class, 'destroy']); // Delete a recipe
             

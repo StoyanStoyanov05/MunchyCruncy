@@ -1,6 +1,7 @@
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 // Global logout function
 export const useLogout = () => {

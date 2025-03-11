@@ -37,7 +37,7 @@ class ShoppingListController extends Controller
         // Validation rules
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:100',
-            'items' => 'requiered|array', //Ensure items array is present
+            'items' => 'required|array', //Ensure items array is present
             'items.*.id' => 'required|exists:ingredients,id',
             'items.*.purchased' => 'boolean', // Validate purchased field
         ]);
@@ -45,7 +45,10 @@ class ShoppingListController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-        try{
+
+        // Start a database transaction to ensure data consistency
+        DB::beginTransaction();
+            try{
 
         // Create a new shopping list with the provided user_id
         $shoppingList = ShoppingList::create([
@@ -53,9 +56,9 @@ class ShoppingListController extends Controller
             'user_id' => $user_id,
         ]);
 
-        foreach($request->item as $item) {
+        foreach ($request->items as $item) {
             ShoppingListItem::create([
-                'shoping_list_id' => $shoppingList->id,
+                'shopping_list_id' => $shoppingList->id,
                 'ingredient_id' => $item['id'],
                 'purchased' => $item['purchased'] ?? false,
             ]);
