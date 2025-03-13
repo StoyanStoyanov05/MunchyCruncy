@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Models\ShoppingListItem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ShoppingList extends Model
 {
@@ -30,12 +29,13 @@ class ShoppingList extends Model
         return $this->belongsTo(Ingredient::class);
     }
 
+
     /**
      * Define relationship with ShoppingListItems (if exists)
      */
-    public function items(): HasMany
+    public function items()
     {
-        return $this->hasMany(related: ShoppingListItem::class);
+        return $this->hasMany(ShoppingListItem::class);
     }
-
+    
 }

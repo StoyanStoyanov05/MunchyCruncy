@@ -52,7 +52,7 @@ class CheckBearerToken
 
             // Proceed with the next middleware
             return $next($request);
-                }
+        }
 
         // If the Bearer token is not found, return an error
         return response()->json(['message' => 'Invalid Authorization format'], 401);

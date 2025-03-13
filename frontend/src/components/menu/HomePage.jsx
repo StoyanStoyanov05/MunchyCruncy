@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from "react";
-import { useInfiniteQuery, useQuery} from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -13,9 +13,9 @@ const fetchRecipes = async ({ pageParam = 1, ingredients = [] }) => {
 
     const response = await axios.get(url);
     return response.data;
-}; 
+};
 
-    const fetchIngredients = async () => {
+const fetchIngredients = async () => {
     const response = await axios.get(
         "http://localhost:8000/api/v1/ingredients?all=true");
     return response.data;
@@ -32,7 +32,7 @@ function HomePage() {
     });
 
     // Fetch recipes
-
+    
     const {
         data,
         fetchNextPage,
@@ -113,45 +113,45 @@ function HomePage() {
                         ))}
                 </div>
             </div>
+
             {/* Main Content */}
             <div className="flex-1 p-6">
-            <h1 className="text-3xl font-bold mb-6 text-center">Recipes</h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {data?.pages.map((page, pageIndex) =>
-                    page.data.map((recipe, index) => {
-                        const isLast =
-                            pageIndex === data.pages.length - 1 &&
-                            index === page.data.length - 1;
-                        return (
-                            <div
-                                key={recipe.id}
-                                ref={isLast ? lastRecipeRef : null}
-                                className="border rounded-lg shadow-lg overflow-hidden"
-                            >
-                            <Link to={`/recipe/${recipe.id}`}>
-                                    <img
-                                        src={
-                                            `http://127.0.0.1:8000/images/${recipe.imageUrl}`}
-                                        alt={recipe.title}
-                                        className="w-full h-48 object-cover"
-                                    />
-                                <div className="p-4">
-                                    <h2 className="text-xl font-semibold text-center">
-                                    {recipe.title}
-                                    </h2>     
-
-                                </div>                  
-                            </Link>
-                        </div>
-                        );
-                    })
-                )}
+                <h1 className="text-3xl font-bold mb-6 text-center">Recipes</h1>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    {data?.pages.map((page, pageIndex) =>
+                        page.data.map((recipe, index) => {
+                            const isLast =
+                                pageIndex === data.pages.length - 1 &&
+                                index === page.data.length - 1;
+                            return (
+                                <div
+                                    key={recipe.id}
+                                    ref={isLast ? lastRecipeRef : null}
+                                    className="border rounded-lg shadow-lg overflow-hidden"
+                                >
+                                    <Link to={`/recipe/${recipe.id}`}>
+                                        <img
+                                            src={
+                                                `http://127.0.0.1:8000/images/${recipe.imageUrl}`}
+                                            alt={recipe.title}
+                                            className="w-full h-48 object-cover"
+                                        />
+                                        <div className="p-4">
+                                            <h2 className="text-xl font-semibold text-center">
+                                                {recipe.title}
+                                            </h2>
+                                        </div>
+                                    </Link>
+                                </div>
+                            );
+                        })
+                    )}
+                </div>
+                {isFetchingNextPage && <p className="text-center mt-4">Loading more...</p>}
             </div>
-            {isFetchingNextPage && <p className="text-center mt-4">Loading more...</p>}
         </div>
-    </div>
     );
-    
+
 }
 
 export default HomePage;

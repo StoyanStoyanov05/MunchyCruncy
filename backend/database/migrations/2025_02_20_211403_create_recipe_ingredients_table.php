@@ -17,12 +17,12 @@ return new class extends Migration
                 ->foreignId('recipe_id')
                 ->constrained()
                 ->onDelete('cascade'); // Foreign key to recipes
-                
+
             $table
                 ->foreignId('ingredient_id')
                 ->constrained()
                 ->onDelete('cascade'); // Foreign key to ingredients
-                
+
             $table->integer('quantity')->nullable(); // Example extra field
         });
     }

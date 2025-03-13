@@ -11,6 +11,7 @@ export default function LoginPage() {
         email: "willa29@example.com",
         password: "password"
     });
+
     const [error, setError] = useState("");
     const navigate = useNavigate();  // For redirecting after login
 
@@ -50,8 +51,9 @@ export default function LoginPage() {
 
                 toast.success("Login successful!"); // Show success notification
                 navigate("/"); // Redirect to the home page after successful login
-
+                
             }
+
         } catch (error) {
             setError("Invalid credentials or server error.");
         }

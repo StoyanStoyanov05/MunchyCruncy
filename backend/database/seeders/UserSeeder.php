@@ -21,12 +21,12 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
             'role' => 1, // Admin role
         ]);
-
+        
         User::factory()->create([
             'email' => 'willa29@example.com',
             'role' => 0
         ]);
-        
-        User::factory(10)->create();
+
+        User::factory(10)->create();        
     }
 }

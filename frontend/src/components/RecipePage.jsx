@@ -60,9 +60,9 @@ const RecipePage = () => {
                     rating: selectedRating,
                 },
                 {
-                headers: {
-                'Authorization': `Bearer ${authToken}`
-                }
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
                 }
             );
 

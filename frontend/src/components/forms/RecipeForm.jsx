@@ -6,6 +6,7 @@ import { FaPlus, FaMinus, FaUpload } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import { useAuthCheck } from '../../utils/authUtils';
 
+
 const RecipeForm = ({ isEdit = false }) => {
 
     if (isEdit) {
@@ -33,6 +34,7 @@ const RecipeForm = ({ isEdit = false }) => {
     }, []);
 
     const authToken = Cookies.get("auth_token");
+
 
     useEffect(() => {
         if (!user) {
@@ -105,7 +107,7 @@ const RecipeForm = ({ isEdit = false }) => {
         try {
             const response = await axios.delete(
                 `http://127.0.0.1:8000/api/v1/recipes/${recipeId}/ingredients/${ingredientId}`
-                ,{
+                , {
                     headers: { 'Authorization': `Bearer ${authToken}` }
                 });
 
@@ -143,13 +145,13 @@ const RecipeForm = ({ isEdit = false }) => {
 
             if (isEdit && id) {
                 await axios.put(`http://127.0.0.1:8000/api/v1/recipes/${id}`,
-                     recipeData
-                     ,{ headers: { 'Authorization': `Bearer ${authToken}` } });
+                    recipeData,
+                    { headers: { 'Authorization': `Bearer ${authToken}` } });
             } else {
                 await axios.post('http://127.0.0.1:8000/api/v1/recipes',
-                     recipeData,
-                     { headers: { 'Authorization': `Bearer ${authToken}` } }
-                    );
+                    recipeData,
+                    { headers: { 'Authorization': `Bearer ${authToken}` } }
+                );
             }
 
             navigate(`/my-recipes`);

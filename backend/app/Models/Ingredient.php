@@ -12,7 +12,7 @@ class Ingredient extends Model
 
     protected $fillable = [
         'name',
-         'is_liquid'
+        'is_liquid'
     ];
 
     /**
@@ -23,6 +23,6 @@ class Ingredient extends Model
         return $this->belongsToMany(Recipe::class, 'recipe_ingredients')
             ->using(RecipeIngredient::class)
             ->withPivot('quantity');
-
+            
     }
 }

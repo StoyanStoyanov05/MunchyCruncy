@@ -22,6 +22,7 @@ class Recipe extends Model
     {
         return $this->belongsTo(User::class);
     }
+
     // Many-to-Many relationship with Ingredients
     public function ingredients()
     {
@@ -29,6 +30,7 @@ class Recipe extends Model
             ->using(RecipeIngredient::class)
             ->withPivot('quantity'); // Include extra pivot fields if needed
     }
+
     // Recipe.php
     public function ratings()
     {

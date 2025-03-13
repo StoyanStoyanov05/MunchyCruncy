@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class RecipeController extends Controller
-{    
+{
     // GET: api/v1/recipes
     public function index()
     {
@@ -27,14 +27,14 @@ class RecipeController extends Controller
         $recipes = Recipe::where(
             'user_id',
             $user_id
-            )->paginate();
-   
+        )->paginate();
+
         if ($recipes->isEmpty()) {
             return response()->json([
                 'message' => 'No recipes found for this user'
             ], 404);
         }
-   
+
         return RecipeResource::collection($recipes);
     }
 
@@ -52,26 +52,30 @@ class RecipeController extends Controller
         return new RecipeResource($recipe);
     }
 
-            
     // GET: api/v1/recipes/search?ingredients[]=tomato&ingredients[]=chicken
     public function searchByIngredientNames(Request $request)
     {
         $ingredientNames = $request->input('ingredients', []);
+
         if (empty($ingredientNames)) {
             return response()->json([
                 'message' => 'No ingredients provided'
             ], 400);
         }
+
         $recipes = Recipe::whereHas('ingredients', function ($query) use ($ingredientNames) {
             $query->whereIn('name', $ingredientNames);
         }, '>=', count($ingredientNames))->with('ingredients')->get();
+
         if ($recipes->isEmpty()) {
             return response()->json([
                 'message' => 'No recipes found'
             ], 404);
         }
+
         return RecipeResource::collection($recipes);
     }
+
     // POST: api/v1/recipes
     public function store(Request $request)
     {
@@ -89,7 +93,7 @@ class RecipeController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-        
+
         // Handle image upload if base64 provided
         $imageName = null;
         if ($request->has('image_url') && !empty($request->image_url)) {
@@ -116,9 +120,11 @@ class RecipeController extends Controller
             'user_id' => 'required|exists:users,id',
             'rating' => 'required|integer|min:1|max:5',
         ]);
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
+
         // Find or create the rating by user and recipe
         $rating = Rating::updateOrCreate(
             [
@@ -164,10 +170,10 @@ class RecipeController extends Controller
         // Update the recipe fields if provided
         $recipe->update($request->only([
             'title',
-             'description',
-              'instructions'
+            'description',
+            'instructions'
         ]) + [
-               'image_url' => $imageName
+            'image_url' => $imageName
         ]);
 
         // Sync ingredients if provided

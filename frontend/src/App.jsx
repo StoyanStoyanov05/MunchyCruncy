@@ -1,7 +1,7 @@
 import {
-     BrowserRouter as Router,
-     Routes,
-     Route 
+    BrowserRouter as Router,
+    Routes,
+    Route
 } from "react-router-dom";
 
 import './App.css';
@@ -13,7 +13,7 @@ import Navbar from "./components/layout/Navbar";
 import LoginPage from "./components/menu/LoginPage";
 import ProfilePage from "./components/menu/ProfilePage";
 
-import ShoppingListPage from "./components/forms/ShoppingListForm.jsx";
+import ShoppingListPage from "./components/menu/user-menu/ShoppingListPage";
 
 import ShoppingListForm from "./components/forms/ShoppingListForm";
 import MyRecipesPage from "./components/menu/user-menu/MyRecipesPage";
@@ -31,20 +31,22 @@ function App() {
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/login" element={<LoginPage />} />
 
-                    {/* Logged in pages */} 
+                    {/* Logged in pages */}                    
                     <Route path="/profile" element={<ProfilePage />} />
+
                     <Route path="/shopping-list" element={<ShoppingListPage />} />
                     <Route path="/my-recipes" element={<MyRecipesPage />} />
 
-                    <Route path="/shopping-lists/:userId" element={<ShoppingListPage />} /> 
+
+                    <Route path="/shopping-lists/:userId" element={<ShoppingListPage />} />
                     <Route path="/shopping-lists/:userId/edit/:id" element={<ShoppingListForm isEdit={true} />} />
                     <Route path="/shopping-lists/:userId/create" element={<ShoppingListForm />} />
-                
 
                     <Route path="/recipes/edit/:id" element={<RecipeForm isEdit={true} />} />
-                    <Route path="/recipes/create" element={<RecipeForm />} /> 
+                    <Route path="/recipes/create" element={<RecipeForm />} />
 
                     <Route path="/recipe/:id" element={<RecipePage />} />
+
                 </Routes>
             </div>
         </Router>

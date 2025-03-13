@@ -6,11 +6,15 @@ import { toast, ToastContainer } from "react-toastify";
 import { useAuthCheck, useLogout } from "../../utils/authUtils";
 
 function ProfilePage() {
-    useAuthCheck();
-    const navigate = useNavigate();
-    const logout = useLogout(); // Get logout function
-    const user = JSON.parse(Cookies.get("user")) || null;  // Get user info from cookies
 
+    // debugger
+    useAuthCheck();
+    
+    const navigate = useNavigate();
+    const logout = useLogout();
+
+    const user = JSON.parse(Cookies.get("user")) || null;  // Get user info from cookies
+    
     const token = Cookies.get("auth_token");
 
     const [formData, setFormData] = useState({
@@ -47,14 +51,13 @@ function ProfilePage() {
                 {
                     name: formData.name,
                     email: formData.email,
-                    password: formData.password,  // You can decide whether to send the password if it's not empty
+                    password: formData.password, // You can decide whether to send the password if it's not empty
                 },
                 {
-            
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                },
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
                 }
             );
 
@@ -62,7 +65,7 @@ function ProfilePage() {
                 // Update cookies with the new user data
                 Cookies.set("user", JSON.stringify(response.data.user), { expires: 7 });
                 // Assuming response.data contains the updated user info
-                const updatedUser = response.data.data;  // Extract the user from the response
+                const updatedUser = response.data.data; // Extract the user from the response
 
                 // Update cookies with the new user data
                 Cookies.set("user", JSON.stringify(updatedUser), { expires: 7 });
@@ -73,10 +76,10 @@ function ProfilePage() {
             // Check if the error response status is 401 (Unauthorized)
             if (error.response && error.response.status === 401) {
                 toast.error("Session expired. Please log in again.");
-                logout();                
+                logout();
             } else {
                 // Handle other errors normally
-            setError("An error occurred while updating your profile.");  
+                setError("An error occurred while updating your profile.");
             }
         }
     };

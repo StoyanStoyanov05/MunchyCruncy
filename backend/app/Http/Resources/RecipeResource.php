@@ -25,10 +25,12 @@ class RecipeResource extends JsonResource
             'ratings' => RatingResource::collection(
                 $this->ratings
             ), // Fetch all ratings for this recipe
+
             'averageRating' => round(
                 (float) $this->ratings()->avg('rating'),
                 2
             ), // Cast to float & round to 2 decimal places
+
         ];
     }
 }

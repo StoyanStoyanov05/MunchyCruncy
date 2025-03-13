@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
-class   ShoppingListController extends Controller
+
+class ShoppingListController extends Controller
 {
     // GET: api/v1/shopping-lists/{user_id}
     public function index($user_id)
@@ -25,8 +26,8 @@ class   ShoppingListController extends Controller
     {
         // Find the shopping list by ID and user_id
         $shoppingList = ShoppingList::where('user_id', $user_id)
-        ->with('items.ingredient') // Eager load the items and ingredients
-        ->findOrFail($id); 
+            ->with('items.ingredient') // Eager load items and their ingredients
+            ->findOrFail($id);
 
         return new ShoppingListResource($shoppingList);
     }
@@ -37,8 +38,8 @@ class   ShoppingListController extends Controller
         // Validation rules
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:100',
-            'items' => 'required|array', //Ensure items array is present
-            'items.*.id' => 'required|exists:ingredients,id',
+            'items' => 'required|array', // Ensure items array is present
+            'items.*.id' => 'required|exists:ingredients,id', // Validate each ingredient_id
             'items.*.purchased' => 'boolean', // Validate purchased field
         ]);
 
@@ -48,31 +49,32 @@ class   ShoppingListController extends Controller
 
         // Start a database transaction to ensure data consistency
         DB::beginTransaction();
-            try{
 
-        // Create a new shopping list with the provided user_id
-        $shoppingList = ShoppingList::create([
-            'name' => $request->name,
-            'user_id' => $user_id,
-        ]);
-
-        foreach ($request->items as $item) {
-            ShoppingListItem::create([
-                'shopping_list_id' => $shoppingList->id,
-                'ingredient_id' => $item['id'],
-                'purchased' => $item['purchased'] ?? false,
+        try {
+            // Create a new shopping list with the provided user_id
+            $shoppingList = ShoppingList::create([
+                'name' => $request->name,
+                'user_id' => $user_id,
             ]);
-        }
 
-        DB::commit(); //Commit the transaction
-        
-        return new ShoppingListResource($shoppingList);
-    } catch(\Exception $e) {
-        DB::rollBack(); //Rollbacj the transaction in case of an error
-        return response()->json(['message' => 'Failed to create shopping list', 'error' => $e->getMessage()], 500);
+            // Add ingredients to the shopping list
+            foreach ($request->items as $item) {
+                ShoppingListItem::create([
+                    'shopping_list_id' => $shoppingList->id,
+                    'ingredient_id' => $item['id'],
+                    'purchased' => $item['purchased'] ?? false,
+                ]);
+            }
+
+            DB::commit(); // Commit the transaction
+
+            return new ShoppingListResource($shoppingList);
+        } catch (\Exception $e) {
+            DB::rollBack(); // Rollback the transaction in case of an error
+            return response()->json(['message' => 'Failed to create shopping list', 'error' => $e->getMessage()], 500);
+        }
     }
 
-}
 
     // PUT: api/v1/shopping-lists/{user_id}/{id}
     public function update(Request $request, $user_id, $id)
@@ -100,12 +102,12 @@ class   ShoppingListController extends Controller
         DB::beginTransaction();
 
         try {
-            // Update the shopping list
+            // Update the shopping list name
             $shoppingList->update([
                 'name' => $request->name,
             ]);
 
-             // Delete all existing shopping list items for this list
+            // Delete all existing shopping list items for this list
             ShoppingListItem::where('shopping_list_id', $id)->delete();
 
             // Add new items
@@ -116,7 +118,7 @@ class   ShoppingListController extends Controller
                     'purchased' => $item['purchased'] ?? false,
                 ]);
             }
- 
+
             DB::commit(); // Commit the transaction
 
             return new ShoppingListResource($shoppingList);
@@ -125,7 +127,7 @@ class   ShoppingListController extends Controller
             return response()->json(['message' => 'Failed to update shopping list', 'error' => $e->getMessage()], 500);
         }
     }
-    
+
     // DELETE: api/v1/shopping-lists/{user_id}/{id}
     public function destroy($user_id, $id)
     {
