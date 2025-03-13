@@ -28,7 +28,7 @@ function Navbar() {
             <div className="container mx-auto flex justify-between items-center">
                 <div className="text-lg font-bold">
                     <Link to="/">
-                        <img src={logo} alt="MyApp Logo" className="h-8" />
+                        <img src={logo} alt="MyApp Logo" className="h-12" />
                     </Link>
                 </div>
                 <div className="space-x-4">
