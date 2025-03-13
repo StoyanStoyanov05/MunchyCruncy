@@ -6,6 +6,7 @@ import { useAuthCheck } from '../../../utils/authUtils';
 
 const MyRecipesPage = () => {
     useAuthCheck();
+
     const [recipes, setRecipes] = useState([]);
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -18,21 +19,20 @@ const MyRecipesPage = () => {
     const authToken = Cookies.get("auth_token");
 
     const fetchRecipes = useCallback(async () => {
-
         if (!user || !authToken) {
             setError('Unauthorized access. Please log in.');
             navigate('/login');
             return;
-            }
+        }
 
         try {
             const response = await axios.get(
                 `http://127.0.0.1:8000/api/v1/recipes/user/${user.id}`,
                 {
                     headers: {
-                    'Authorization': `Bearer ${authToken}`
+                        'Authorization': `Bearer ${authToken}`
                     }
-                    }
+                }
             );
             setRecipes(response.data.data);
         } catch (err) {
@@ -60,18 +60,19 @@ const MyRecipesPage = () => {
     // Handle deleting a recipe
     const handleDeleteRecipe = async (recipeId) => {
         if (!authToken) {
-                setError('Unauthorized access. Please log in.');
-                navigate('/login');
+            setError('Unauthorized access. Please log in.');
+            navigate('/login');
             return;
-            }
+        }
+
         try {
             const response = await axios.delete(
                 `http://127.0.0.1:8000/api/v1/recipes/${recipeId}`,
                 {
                     headers: {
-                    'Authorization': `Bearer ${authToken}`
+                        'Authorization': `Bearer ${authToken}`
                     }
-                    }
+                }
             );
 
             if (response.status === 200) {

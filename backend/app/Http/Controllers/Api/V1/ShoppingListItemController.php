@@ -13,12 +13,12 @@ class ShoppingListItemController extends Controller
     // GET: api/v1/shopping-lists/{user_id}/{list_id}/items
     public function index($user_id, $list_id)
     {
-        // Retrieve all items for a specific shopping list
+        // Retrieve all items for a specific shopping list with ingredient details
         $items = ShoppingListItem::where(
             'shopping_list_id',
             $list_id
         )
-            ->with('ingredient') //Ensure the ingredient relationship is loaded
+            ->with('ingredient') // Ensure the ingredient relationship is loaded
             ->get();
 
         // Return the items as a collection of resources
@@ -37,7 +37,7 @@ class ShoppingListItemController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        // Create a new shopping list item for the specified shopping list with ingredients details
+        // Create a new shopping list item for the specified shopping list
         $item = ShoppingListItem::create([
             'shopping_list_id' => $list_id,
             'ingredient_id' => $request->ingredient_id,

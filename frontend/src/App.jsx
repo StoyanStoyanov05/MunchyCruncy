@@ -13,10 +13,10 @@ import Navbar from "./components/layout/Navbar";
 import LoginPage from "./components/menu/LoginPage";
 import ProfilePage from "./components/menu/ProfilePage";
 
-import ShoppingListPage from  "./components/menu/user-menu/ShopingListPage";
+import ShoppingListPage from "./components/forms/ShoppingListForm.jsx";
 
 import ShoppingListForm from "./components/forms/ShoppingListForm";
-import MyRecipesPage  from "./components/menu/user-menu/MyRecipesPage";
+import MyRecipesPage from "./components/menu/user-menu/MyRecipesPage";
 import RecipeForm from "./components/forms/RecipeForm";
 import RecipePage from "./components/RecipePage";
 

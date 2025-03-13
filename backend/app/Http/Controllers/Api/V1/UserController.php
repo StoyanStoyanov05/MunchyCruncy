@@ -37,7 +37,7 @@ class UserController extends Controller
         }
     }
 
-    // POST: api/v1/users/login 
+    // POST: api/v1/users/login
     public function login(Request $request)
     {
         // Validate input data
@@ -58,7 +58,7 @@ class UserController extends Controller
         }
 
         $user->tokens()->delete();
-        
+
         // Step 1: Create the token using `createToken` method
         $newToken = $user->createToken('YourAppName');
 
@@ -97,7 +97,7 @@ class UserController extends Controller
             'user' => new UserResource($user)
         ], 200);
     }
-    
+
     // POST: api/v1/users
     public function store(Request $request)
     {

@@ -23,7 +23,7 @@ class ShoppingListItem extends Model
     {
         return $this->belongsTo(ShoppingList::class);
     }
-
+    
     /**
      * Define relationship with Ingredient
      */

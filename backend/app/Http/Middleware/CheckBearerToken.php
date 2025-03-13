@@ -30,15 +30,14 @@ class CheckBearerToken
             // Find the token in the personal_access_tokens table using the raw token
             $accessToken = PersonalAccessToken::where(
                 'token',
-                 $rawToken
-                 )->first();
+                $rawToken
+            )->first();
 
             // If token is not found or expired
             if (!$accessToken || $accessToken->expires_at <= now()) {
-                 return response()->json(['message' => 'Invalid or expired token'], 401);
+                return response()->json(['message' => 'Invalid or expired token'], 401);
             }
-        
-        
+
             // Get the user associated with the token using the polymorphic relation
             $user = $accessToken->tokenable; // This assumes the token is for a user
 
@@ -53,8 +52,8 @@ class CheckBearerToken
 
             // Proceed with the next middleware
             return $next($request);
-    
-        }
+                }
+
         // If the Bearer token is not found, return an error
         return response()->json(['message' => 'Invalid Authorization format'], 401);
     }

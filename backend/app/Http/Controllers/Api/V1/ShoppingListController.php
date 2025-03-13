@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
-class ShoppingListController extends Controller
+class   ShoppingListController extends Controller
 {
     // GET: api/v1/shopping-lists/{user_id}
     public function index($user_id)

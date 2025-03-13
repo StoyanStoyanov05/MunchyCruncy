@@ -5,8 +5,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaPlus, FaMinus } from 'react-icons/fa';
 import { useAuthCheck } from '../../utils/authUtils';
 
-const ShoppingListForm = ({ isEdit = false }) => { 
-    useAuthCheck(); 
+const ShoppingListForm = ({ isEdit = false }) => {
+
+    useAuthCheck();
+
     const [formData, setFormData] = useState({
         name: '',
         items: []
@@ -25,6 +27,8 @@ const ShoppingListForm = ({ isEdit = false }) => {
     }, []);
 
     const authToken = Cookies.get("auth_token");
+
+
     useEffect(() => {
         if (!user) {
             navigate('/login');
@@ -93,13 +97,13 @@ const ShoppingListForm = ({ isEdit = false }) => {
     const addItem = () => {
         setFormData(prevState => ({
             ...prevState,
-            items: [...prevState.items, { 
+            items: [...prevState.items, {
                 itemId: null,
-                id: null, 
+                id: null,
 
                 name: '',
                 purchased: false
-             }]
+            }]
         }));
     };
 
@@ -116,6 +120,7 @@ const ShoppingListForm = ({ isEdit = false }) => {
                     `http://127.0.0.1:8000/api/v1/shopping-lists/${user.id}/${id}/items/${itemToRemove.id}`,
                     { headers: { 'Authorization': `Bearer ${authToken}` } }
                 );
+
             } catch (err) {
                 setError('Failed to remove item.');
                 setLoading(false);
@@ -136,8 +141,9 @@ const ShoppingListForm = ({ isEdit = false }) => {
         setError('');
         setLoading(true);
 
-        //console.log(formDate);
-        //debugger
+
+        // console.log(formData);
+        // debugger
 
         try {
             if (isEdit && id) {
@@ -168,10 +174,10 @@ const ShoppingListForm = ({ isEdit = false }) => {
         }
 
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/v1/ingredients`, 
-            {
-                params: { search: query }
-            });
+            const response = await axios.get(`http://127.0.0.1:8000/api/v1/ingredients`,
+                {
+                    params: { search: query }
+                });
             setIngredientSuggestions(response.data.data);
         } catch (err) {
             console.error('Error fetching ingredients:', err);
@@ -182,16 +188,16 @@ const ShoppingListForm = ({ isEdit = false }) => {
         try {
             const response = await axios.post(
                 `http://127.0.0.1:8000` +
-                `/api/v1/shopping-lists/${user.id}/${id}/items`, 
+                `/api/v1/shopping-lists/${user.id}/${id}/items`,
                 {
-                ingredient_id: ingredient.id,
-                purchased: false, // Default value
-            },
-            {
-                headers: {
-                    'Authorization': `Bearer ${authToken}`
-                }
-            });
+                    ingredient_id: ingredient.id,
+                    purchased: false, // Default value
+                },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
 
             const updatedItems = [...formData.items];
             updatedItems[index].itemId = response.data.id;
@@ -267,12 +273,13 @@ const ShoppingListForm = ({ isEdit = false }) => {
                                                         key={ingrSuggestion.id}
                                                         className="p-2 hover:bg-gray-100 cursor-pointer"
                                                         onClick={() => {
-                                                            //Call Api to add the item
+                                                            // Call API to add the item
                                                             handleAddItem(ingrSuggestion, index);
                                                         }}
                                                     >
                                                         {ingrSuggestion.name}
                                                     </li>
+
                                                 ))}
                                             </ul>
                                         )}
